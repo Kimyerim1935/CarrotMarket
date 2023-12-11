@@ -1,5 +1,5 @@
 import SeoHead from '@/components/SeoHead';
-import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 type MoviesType = {
   adult: boolean;
@@ -18,16 +18,23 @@ type MoviesType = {
   vote_count: number
 }
 
-export default function Home({results}: {results: MoviesType[]}) {
+export default function Home({ results }: { results: MoviesType[] }) {
+  const router = useRouter();
+  const handleMove = (id:number, title: string) => {
+    router.push(
+      `/movies/${title}/${id}`
+    )
+  }
+
   return (
     <div className="container">
       <SeoHead title="Home" />
       {
-        results?.map((movie:MoviesType) => (
-          <div className="movie" key={movie.id}>
-            <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-            <h4>{movie.original_title}</h4>
-          </div>
+        results?.map((movie: MoviesType) => (
+            <div className="movie" onClick={() => handleMove(movie.id, movie.original_title)} key={movie.id} >
+              <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
+              <h4>{movie.original_title}</h4>
+            </div>
         ))
       }
        <style jsx>{`
